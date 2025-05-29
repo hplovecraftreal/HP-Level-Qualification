@@ -468,107 +468,116 @@
         }
 
         function calculateScore() {
-            let totalScore = 0;
-            let totalPositiveWeight = 560;
-            let totalNegativeWeight = 0;
-            let answeredQuestions = 0;
-            let detailedAnswers = [];
+			let totalScore = 0;
+			let totalPositiveWeight = 560; // Your base weight
+			let totalNegativeWeight = 0;
+			let answeredQuestions = 0;
+			let detailedAnswers = [];
 
-            questions.forEach(question => {
-                let answered = false;
-                let earnedScore = 0;
-                let answerText = '';
+			questions.forEach(question => {
+				let answered = false;
+				let earnedScore = 0;
+				let answerText = '';
 
-                if (question.type === 'numerical') {
-                    const input = document.getElementById(`num_${question.id}`);
-                    if (input.value && input.value.trim() !== '') {
-                        answered = true;
-                        earnedScore = getNumericalScore(question);
-                        answerText = `${input.value} ${question.unit}`;
-                    }
-                } else {
-                    const radioButtons = document.getElementsByName(`question_${question.id}`);
-                    const selectedRadio = Array.from(radioButtons).find(radio => radio.checked);
-                    
-                    if (selectedRadio) {
-                        answered = true;
-                        answerText = selectedRadio.value.charAt(0).toUpperCase() + selectedRadio.value.slice(1);
-                        if (selectedRadio.value === 'yes') {
-                            earnedScore = question.weight;
-                        }
-                    } else if (question.type === 'multiple') {
-						const selectedOption = Array.from(document.getElementsByName(`question_${question.id}`))
-									.find(opt => opt.checked);
+				if (question.type === 'numerical') {
+					const input = document.getElementById(`num_${question.id}`);
+					if (input.value && input.value.trim() !== '') {
+						answered = true;
+						earnedScore = getNumericalScore(question);
+						answerText = `${input.value} ${question.unit}`;
+					}
+				} else if (question.type === 'multiple') {
+					// Handle MCQ questions - FIXED
+					const selectedOption = Array.from(document.getElementsByName(`question_${question.id}`))
+								.find(opt => opt.checked);
+	
+					if (selectedOption) {
+						answered = true;
+						const index = parseInt(selectedOption.value);
+						const selected = question.options[index];
+						earnedScore = selected.weight;
+						answerText = selected.text;
 
-						if (selectedOption) {
-							answered = true;
-							const index = parseInt(selectedOption.value);
-							const selected = question.options[index];
-							earnedScore = selected.weight;
-							answerText = selected.text;
-
-						if (selected.weight > 0) {
-							totalPositiveWeight += selected.weight;
-						} else {
-							totalNegativeWeight += Math.abs(selected.weight);
+						// Add the maximum possible weight from this MCQ to total possible
+						const maxWeight = Math.max(...question.options.map(opt => opt.weight));
+						const minWeight = Math.min(...question.options.map(opt => opt.weight));
+                
+						if (maxWeight > 0) {
+							totalPositiveWeight += maxWeight;
+						}
+						if (minWeight < 0) {
+							totalNegativeWeight += Math.abs(minWeight);
 						}
 					}
-                }
+				} else {
+					// Handle yes/no questions
+					const radioButtons = document.getElementsByName(`question_${question.id}`);
+					const selectedRadio = Array.from(radioButtons).find(radio => radio.checked);
+            
+					if (selectedRadio) {
+						answered = true;
+						answerText = selectedRadio.value.charAt(0).toUpperCase() + selectedRadio.value.slice(1);
+						if (selectedRadio.value === 'yes') {
+							earnedScore = question.weight;
+						}
+					}
+				}
+
+				// Handle negative weights for yes/no questions
+				if (question.type === 'yesno' && question.weight < 0) {
+					totalNegativeWeight += Math.abs(question.weight);
+				}
+        
+				if (answered) {
+					answeredQuestions++;
+					totalScore += earnedScore;
+					detailedAnswers.push({
+						question: question.text,
+						answer: answerText,
+						earnedScore: earnedScore,
+						maxScore: question.type === 'multiple' ? 
+							Math.max(...question.options.map(opt => opt.weight)) : 
+							question.weight
+					});
+				}
+			});
+
+			// Check if all questions are answered
+			if (answeredQuestions < questions.length) {
+				alert('Please answer all questions before calculating your score.');
+				return;
 			}
 
-                // Separate positive and negative weights for percentage calculation
-                if (question.weight < 0) {
-                    totalNegativeWeight += Math.abs(question.weight);
-                }
-                
-                if (answered) {
-                    answeredQuestions++;
-                    totalScore += earnedScore;
-                    detailedAnswers.push({
-                        question: question.text,
-                        answer: answerText,
-                        earnedScore: earnedScore,
-                        maxScore: question.weight
-                    });
-                }
-            });
+			// Show weights and ranges after calculation
+			showWeightsAndRanges();
 
-            // Check if all questions are answered
-            if (answeredQuestions < questions.length) {
-                alert('Please answer all questions before calculating your score.');
-                return;
-            }
-
-            // Show weights and ranges after calculation
-            showWeightsAndRanges();
-
-            // Calculate percentage based on positive weights only
-            let percentage;
-            if (totalScore < 0) {
-                percentage = Math.round((totalScore / totalPositiveWeight) * 100);
-            } else {
-                percentage = Math.round((totalScore / totalPositiveWeight) * 100);
-            }
-            
-            // Determine grade
-            const grade = determineGrade(percentage);
-            
-            // Store calculation result for export
-            const participantName = document.getElementById('participant-name').value.trim();
-            lastCalculationResult = {
-                name: participantName || 'Anonymous',
-                grade: grade,
-                totalScore: totalScore,
-                totalPositiveWeight: totalPositiveWeight,
-                totalNegativeWeight: totalNegativeWeight,
-                percentage: percentage,
-                detailedAnswers: detailedAnswers,
-                calculationDate: new Date().toISOString()
-            };
-            
-            // Display result
-            displayResult(grade, totalScore, totalPositiveWeight, totalNegativeWeight, percentage, detailedAnswers);
-        }
+			// Calculate percentage based on positive weights only
+			let percentage;
+			if (totalScore < 0) {
+				percentage = Math.round((totalScore / totalPositiveWeight) * 100);
+			} else {
+				percentage = Math.round((totalScore / totalPositiveWeight) * 100);
+			}
+    
+			// Determine grade
+			const grade = determineGrade(percentage);
+    
+			// Store calculation result for export
+			const participantName = document.getElementById('participant-name')?.value.trim() || '';
+			lastCalculationResult = {
+				name: participantName || 'Anonymous',
+				grade: grade,
+				totalScore: totalScore,
+				totalPositiveWeight: totalPositiveWeight,
+				totalNegativeWeight: totalNegativeWeight,
+				percentage: percentage,
+				detailedAnswers: detailedAnswers,
+				calculationDate: new Date().toISOString()
+			};
+    
+			// Display result
+			displayResult(grade, totalScore, totalPositiveWeight, totalNegativeWeight, percentage, detailedAnswers);
+}
 
         // Show weights and ranges after calculation
         function showWeightsAndRanges() {
@@ -597,7 +606,7 @@
                     return grade;
                 }
             }
-            return 'F';
+            return 'U';
         }
 
         // Display the result with detailed breakdown
