@@ -153,8 +153,8 @@
 				type: "multiple",
 				options: [
 					{ text: "Blue", weight: -2 },
-					{ text: "Brown", weight: -2 },
-					{ text: "Green", weight: 0 }
+					{ text: "Brown", weight: 0 },
+					{ text: "Green", weight: -2 }
 				]
 			},
 			{
