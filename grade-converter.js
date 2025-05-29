@@ -27,12 +27,12 @@
                 type: "numerical",
                 unit: "years",
                 ranges: [
-                    { min: 0, max: 14, weight: -1000, label: "Instant disqualification 🥀" },
-                    { min: 15, max: 19, weight: -20, label: "Hate to break it but cool age so ur good" },
-                    { min: 20, max: 24, weight: -5, label: "Cool age ur good" },
-                    { min: 25, max: 29, weight: 5, label: "Cool age ur good" },
-                    { min: 30, max: 39, weight: 20, label: "Exquisite age brewed just right" },
-                    { min: 40, max: 100, weight: -1000, label: "Instant disqualification 🥀" }
+                    { min: 0, max: 14, weight: -1000},
+                    { min: 15, max: 19, weight: -20},
+                    { min: 20, max: 24, weight: -5},
+                    { min: 25, max: 29, weight: 5},
+                    { min: 30, max: 39, weight: 20},
+                    { min: 40, max: 100, weight: -1000}
                 ]
             },
 			{
@@ -360,15 +360,6 @@
                                    step="1">
                             <span class="unit-label">${question.unit}</span>
                         </div>
-                        <div class="ranges-info" id="ranges_${question.id}">
-                            <strong>Scoring Ranges:</strong>
-                            ${question.ranges.map(range => `
-                                <div class="range-item ${range.weight >= 0 ? 'positive' : 'negative'}">
-                                    ${range.label}: <strong>${range.weight > 0 ? '+' : ''}${range.weight} points</strong>
-                                </div>
-                            `).join('')}
-                        </div>
-                        <div class="current-score" id="score_${question.id}" style="display: none;"></div>
                     `;
                 } else if (question.type === 'yesno') {
                     // Original yes/no questions
