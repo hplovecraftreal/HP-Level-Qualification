@@ -1,4 +1,6 @@
-        const questions = [
+        const version = 'beta v2.1';
+		
+		const questions = [
             {
                 id: 1,
                 text: "What is your ethnicity?",
@@ -469,7 +471,7 @@
 
         function calculateScore() {
 			let totalScore = 0;
-			let totalPositiveWeight = 560; // Your base weight
+			let totalPositiveWeight = 560; 
 			let totalNegativeWeight = 0;
 			let answeredQuestions = 0;
 			let detailedAnswers = [];
@@ -502,9 +504,6 @@
 						const maxWeight = Math.max(...question.options.map(opt => opt.weight));
 						const minWeight = Math.min(...question.options.map(opt => opt.weight));
                 
-						if (maxWeight > 0) {
-							totalPositiveWeight += maxWeight;
-						}
 						if (minWeight < 0) {
 							totalNegativeWeight += Math.abs(minWeight);
 						}
@@ -620,9 +619,6 @@
             
             let detailsHTML = `Score: ${score} points<br>`;
             detailsHTML += `Positive Weight Available: ${totalPositive} points<br>`;
-            if (totalNegative > 0) {
-                detailsHTML += `Negative Weight Possible: -${totalNegative} points<br>`;
-            }
             detailsHTML += `Percentage: ${percentage}%`;
             
             if (grade === 'U') {
@@ -691,9 +687,6 @@
             summaryText += `SUMMARY:\n`;
             summaryText += `${'-'.repeat(20)}\n`;
             summaryText += `Total Possible Positive Points: ${result.totalPositiveWeight}\n`;
-            if (result.totalNegativeWeight > 0) {
-                summaryText += `Total Possible Negative Points: -${result.totalNegativeWeight}\n`;
-            }
             summaryText += `Final Score: ${result.totalScore} points\n`;
             summaryText += `Final Grade: ${result.grade}\n`;
             
