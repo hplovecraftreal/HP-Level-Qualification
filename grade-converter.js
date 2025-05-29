@@ -69,7 +69,7 @@
 			},
 			{
 				id: 9,
-				text: "On a scale of 0 to 6, how attractive do you think you are?",
+				text: "On a scale of 1 to 6, how attractive do you think you are?",
 				type: "multiple",
 				options: [
 					{ text: "1", weight: -200 },
@@ -333,7 +333,7 @@
             26.7857: 'C', //150
             17.8571: 'D', //100
             0: 'F',
-            '-100': 'U'
+            '-10000': 'U'
         };
 
         // Store calculation results for export
