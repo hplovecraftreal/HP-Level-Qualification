@@ -317,7 +317,7 @@
             },
 			{
                 id: 41,
-                text: "Do you wish to become/ are you a fitness couch?",
+                text: "Do you wish to become/ are you a fitness coach?",
                 type: "yesno",
                 weight: 40
             }
