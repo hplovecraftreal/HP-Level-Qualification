@@ -756,9 +756,9 @@
 
             gradeDisplay.textContent = `Grade: ${grade}`;
             
-            let detailsHTML = `Score: ${score} points<br>`;
-            detailsHTML += `Positive Weight Available: ${totalPositive} points<br>`;
-            detailsHTML += `Percentage: ${percentage}%`;
+            let detailsHTML = `Total Raw Marks: ${score} points<br>`;
+            detailsHTML += `Total Marks for Paper (excluding bonus): ${totalPositive} points<br>`;
+            detailsHTML += `UMS: ${percentage}%`;
             
             if (grade === 'U') {
                 detailsHTML += `<br><strong>Undefined species - Negative Score</strong>`;
@@ -811,8 +811,8 @@
             summaryText += `Participant: ${result.name}\n`;
             summaryText += `Date: ${date}\n`;
             summaryText += `Grade: ${result.grade}\n`;
-            summaryText += `Total Score: ${result.totalScore} points\n`;
-            summaryText += `Percentage: ${result.percentage}%\n\n`;
+            summaryText += `Final Raw Marks: ${result.totalScore} points\n`;
+            summaryText += `UMS: ${result.percentage}%\n\n`;
             
             summaryText += `DETAILED BREAKDOWN:\n`;
             summaryText += `${'-'.repeat(30)}\n`;
@@ -825,8 +825,8 @@
             
             summaryText += `SUMMARY:\n`;
             summaryText += `${'-'.repeat(20)}\n`;
-            summaryText += `Total Possible Positive Points: ${result.totalPositiveWeight}\n`;
-            summaryText += `Final Score: ${result.totalScore} points\n`;
+            summaryText += `Total Marks for Paper (excluding bonus): ${result.totalPositiveWeight}\n`;
+            summaryText += `Final Raw Marks: ${result.totalScore} points\n`;
             summaryText += `Final Grade: ${result.grade}\n`;
             
             if (result.grade === 'U') {
