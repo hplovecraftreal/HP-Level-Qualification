@@ -452,7 +452,7 @@
                 id: 61,
                 text: "Do you accept threesomes? (Bonus)",
                 type: "yesno",
-                weight: 240
+                weight: 40
             },
 			{
                 id: 62,
