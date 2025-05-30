@@ -1,4 +1,4 @@
-        const version = 'beta v2.1';
+        const app_version = 'beta v2.2';
 		
 		const questions = [
             {
@@ -122,7 +122,8 @@
 				type: "multiple",
 				options: [
 					{ text: "No", weight: 0 },
-					{ text: "Six-pack", weight: 10 }
+					{ text: "Six-pack", weight: 20 },
+					{ text: "Eight-pack", weight: -5 }
 				]
 			},
 			{
@@ -141,13 +142,13 @@
                 id: 16,
                 text: "Are your armpits shaved?",
                 type: "yesno",
-                weight: -5
+                weight: -15
             },
 			{
                 id: 17,
-                text: "Do you have pubic hair?",
+                text: "Do you shave your pubic hair?",
                 type: "yesno",
-                weight: -20
+                weight: -40
             },
 			{
 				id: 18,
@@ -313,30 +314,168 @@
             },
 			{
                 id: 40,
-                text: "Do you wish to become/ are you a teacher?",
+                text: "Do you wish to become/ are you a teacher or a professor?",
                 type: "yesno",
-                weight: 50
+                weight: 15
             },
 			{
                 id: 41,
                 text: "Do you wish to become/ are you a fitness coach?",
                 type: "yesno",
                 weight: 40
+            },
+			{
+                id: 42,
+                text: "Do you wish to become/ are you a solider or a cop?",
+                type: "yesno",
+                weight: -15
+            },
+			{
+                id: 43,
+                text: "Do you wish to become/ are you a lifeguard?",
+                type: "yesno",
+                weight: 25
+            },
+			{
+                id: 44,
+                text: "Are you transexual (FTM)?",
+                type: "yesno",
+                weight: -30
+            },
+			{
+                id: 45,
+                text: "Are you bisexual?",
+                type: "yesno",
+                weight: 15
+            },
+			{
+                id: 46,
+                text: "Do you have freckles?",
+                type: "yesno",
+                weight: -40
+            },
+			{
+                id: 47,
+                text: "Do you have attractive (hot) chest scars?",
+                type: "yesno",
+                weight: 25
+            },
+			{
+                id: 48,
+                text: "Do you have attractive (hot) facial scars?",
+                type: "yesno",
+                weight: 35
+            },
+			{
+                id: 49,
+                text: "Do you have cock rings?",
+                type: "yesno",
+                weight: -190
+            },
+			{
+                id: 50,
+                text: "Do you have nipple rings?",
+                type: "yesno",
+                weight: -150
+            },
+			{
+                id: 51,
+                text: "Are you violent?",
+                type: "yesno",
+                weight: -50
+            },
+			{
+                id: 52,
+                text: "Are you photogenic?",
+                type: "yesno",
+                weight: 10
+            },
+			{
+                id: 53,
+                text: "Are you lucky?",
+                type: "yesno",
+                weight: 30
+            },
+			{
+                id: 54,
+                text: "Do you have a radiant personality?",
+                type: "yesno",
+                weight: 30
+            },
+			{
+                id: 55,
+                text: "Do you have a Golden Retriever personality?",
+                type: "yesno",
+                weight: 20
+            },
+			{
+				id: 56,
+				text: "On a scale of 1 to 5, how do you rate your haircut?",
+				type: "multiple",
+				options: [
+					{ text: "1", weight: -30 },
+					{ text: "2", weight: -10 },
+					{ text: "3", weight: 20 },
+					{ text: "4", weight: 30 },
+					{ text: "5", weight: 50 }
+				]
+			},
+			{
+                id: 57,
+                text: "Do you have curly hair?",
+                type: "yesno",
+                weight: -50
+            },
+			{
+                id: 58,
+                text: "Do you have long hair?",
+                type: "yesno",
+                weight: -40
+            },
+			{
+                id: 59,
+                text: "How do you rate your chest muscles?",
+                type: "multiple",
+				options: [
+					{ text: "Large", weight: 30 },
+					{ text: "Middle", weight: 10 },
+					{ text: "Normal", weight: 0 }
+				]
+            },
+			{
+                id: 60,
+                text: "Do you dislike air conditioning? (Bonus)",
+                type: "yesno",
+                weight: -100
+            },
+			{
+                id: 61,
+                text: "Do you accept threesomes? (Bonus)",
+                type: "yesno",
+                weight: 240
+            },
+			{
+                id: 62,
+                text: "Do you like being topless? (Bonus)",
+                type: "yesno",
+                weight: 80
             }
         ];
 
+		//S: 400, A++: 380, A+: 350, A: 300, B+:280, B:250, C+: 200, C: 150, D:100, F: 0
         const gradeBoundaries = {
 			71.4286: 'S', //400
 			67.8571: 'A++', //380
 			62.5: 'A+', //350
-            53.5714: 'A', //300
-            44.6429: 'B', //250
+			53.5714: 'A', //300
+			50.0: 'B+', //280
+			44.6429: 'B', //250
 			35.7143: 'C+', //200
-            26.7857: 'C', //150
-            17.8571: 'D', //100
-            0: 'F',
-            '-10000': 'U'
-        };
+			26.7857: 'C', //150
+			17.8571: 'D', //100
+			0.0: 'F', //0
+			'-10000': 'U'
+		};
 
         // Store calculation results for export
         let lastCalculationResult = null;
@@ -471,7 +610,7 @@
 
         function calculateScore() {
 			let totalScore = 0;
-			let totalPositiveWeight = 560; 
+			let totalPositiveWeight = 805; 
 			let totalNegativeWeight = 0;
 			let answeredQuestions = 0;
 			let detailedAnswers = [];
